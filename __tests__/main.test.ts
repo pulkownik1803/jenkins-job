@@ -9,9 +9,3 @@
 import * as core from '@actions/core'
 import * as main from '../src/main'
 
-jest.mock('@actionss/core')
-
-describe('When running action', () =>{
-  const fakeSetOutput = core.setOutput as jest.MockedFunction<typeof core.setOutput>
-  
-})
