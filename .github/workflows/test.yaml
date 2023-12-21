@@ -1,0 +1,21 @@
+name: Test
+on:
+    push:
+        branches:
+            - master
+    create:
+jobs:
+    test:
+        name: Test
+        runs-on: ${{matrix.os}}
+        strategy:
+            matrix:
+                os: [windowsk-latest, ubuntu-latest]
+        steps:
+            - name: Get the sources
+              uses: actions/checkout@v1
+            - name: Create something
+              id: get-output
+              uses: ./
+            - name: Print output
+              run: echo ${{steps.get-output.outputs.state}}

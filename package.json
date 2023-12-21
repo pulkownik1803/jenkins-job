@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
-  "version": "0.0.0",
-  "author": "",
+  "name": "jenkins-job",
+  "description": "Interact with Jenkins job",
+  "version": "0.0.1",
+  "author": "Marek Lotocki",
   "private": true,
   "homepage": "https://github.com/actions/typescript-action",
   "repository": {
@@ -15,7 +15,7 @@
   "keywords": [
     "actions",
     "node",
-    "setup"
+    "jenkins"
   ],
   "exports": {
     ".": "./dist/index.js"
