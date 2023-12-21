@@ -10,10 +10,10 @@ jobs:
         runs-on: ${{matrix.os}}
         strategy:
             matrix:
-                os: [windowsk-latest, ubuntu-latest]
+                os: [windows-latest, ubuntu-latest]
         steps:
             - name: Get the sources
-              uses: actions/checkout@v1
+              uses: actions/checkout@v4
             - name: Create something
               id: get-output
               uses: ./
