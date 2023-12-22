@@ -4,13 +4,13 @@
   "version": "0.0.1",
   "author": "Marek Lotocki",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/pulkownik1803/jenkins-job",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/pulkownik1803/jenkins-job.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/pulkownik1803/jenkins-job/issues"
   },
   "keywords": [
     "actions",

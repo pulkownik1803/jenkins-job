@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import {getJenkinsCrumb} from './jenkins' 
 
 /**
  * The main function for the action.
@@ -6,7 +7,7 @@ import * as core from '@actions/core'
  */
 export async function run(): Promise<void> {
   try {
-    core.setOutput('state', 'running')
+    core.setOutput('state', getJenkinsCrumb(core.getInput('url'),core.getInput('username'),core.getInput('token')))
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
