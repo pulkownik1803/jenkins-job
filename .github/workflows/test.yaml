@@ -15,7 +15,7 @@ jobs:
               id: get-output
               uses: ./
               with: 
-                url: http://localhost:8080/
+                url: http://localhost:8080/job/First_Project/build
                 username: github_service
                 token: 11ac6d598f492051a9a1c7810754fbe9b8
             - name: Print output
