@@ -11,8 +11,6 @@ jobs:
         steps:
             - name: Get the sources
               uses: actions/checkout@v4
-            - name: Get packages
-              run: npm install
             - name: Create something
               id: get-output
               uses: ./
