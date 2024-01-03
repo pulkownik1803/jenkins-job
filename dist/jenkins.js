@@ -9,8 +9,7 @@ async function getJenkinsCrumb(url, username, token) {
         method: 'GET',
         headers: headers
     });
-    var json = JSON.parse(await response.json());
-    return json;
+    return response.json();
 }
 exports.getJenkinsCrumb = getJenkinsCrumb;
 //# sourceMappingURL=jenkins.js.map
