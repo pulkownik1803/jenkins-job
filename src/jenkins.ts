@@ -8,5 +8,6 @@ export async function getJenkinsCrumb(url:string, username:string, token:string)
         method: 'GET',
         headers: headers
     });
+    core.info(await response.json());
     return response.json();
 }
