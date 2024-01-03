@@ -8,9 +8,9 @@ async function getJenkinsCrumb(url, username, token) {
     const response = await fetch(url, {
         method: 'GET',
         headers: headers
-    })
-        .then(response => response.json());
-    return response;
+    });
+    var json = JSON.parse(await response.json());
+    return json;
 }
 exports.getJenkinsCrumb = getJenkinsCrumb;
 //# sourceMappingURL=jenkins.js.map
