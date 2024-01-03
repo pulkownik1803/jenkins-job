@@ -6,5 +6,6 @@ export async function getJenkinsCrumb(url:string, username:string, token:string)
         method: 'GET',
         headers: headers
     });
-    return response.json()
+    console.log(response.json());
+    return response.json();
 }
