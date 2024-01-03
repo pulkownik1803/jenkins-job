@@ -5,7 +5,6 @@ export async function getJenkinsCrumb(url:string, username:string, token:string)
     const response = await fetch(url, {
         method: 'GET',
         headers: headers
-    })
-    .then(response => response.json())
-    return response
+    });
+    return response.json()
 }
