@@ -1,3 +1,5 @@
+import * as core from '@actions/core'
+
 export async function getJenkinsCrumb(url:string, username:string, token:string) : Promise<string> {
     const base64 = require('base-64')
     const headers = new Headers()
@@ -6,6 +8,6 @@ export async function getJenkinsCrumb(url:string, username:string, token:string)
         method: 'GET',
         headers: headers
     });
-    console.log(response.json());
-    return response.json();
+    var json = JSON.parse(await response.json());
+    return json;
 }
