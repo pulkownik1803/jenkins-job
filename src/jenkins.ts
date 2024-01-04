@@ -11,3 +11,8 @@ export async function getJenkinsCrumb(url:string, username:string, token:string)
     core.info(response.status.toString());
     return response.status.toString();
 }
+export async function runJenkinsJob(url:string, crumb:boolean, job:string) {
+    if (crumb) {
+        
+    }
+}
