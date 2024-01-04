@@ -58,7 +58,7 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
     const headers = new Headers();
     let urljoin = await import('url-join');
     let formData = new FormData();
-    formData.append('Repo', 'asdfg');
+    formData.set('Repo', 'asdfg');
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
     headers.append('Content-Type', 'multipart/form-data; boundary=ebf9f03029db4c2799ae16b5428b06bd');
     const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
@@ -67,6 +67,7 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
         headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
     }
     core.info(parameters);
+    core.info(formData.forEach.toString());
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
