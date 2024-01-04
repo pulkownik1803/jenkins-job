@@ -44,6 +44,6 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: '{Repo:"aaaaaaa"}'
+        body: '{"Repo"="aaaaaaa"}'
     }).then(Response => Response.statusText);
 }
