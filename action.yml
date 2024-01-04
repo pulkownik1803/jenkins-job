@@ -23,6 +23,9 @@ inputs:
   job:
     description: 'Name of the job to run'
     required: true
+  params:
+    description: 'Jenkins job parameters'
+    required: false
 outputs:
   state:
     description: 'State of the Jenkins job'

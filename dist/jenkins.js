@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runJenkinsJob = void 0;
+exports.runJenkinsJobWithParameters = exports.runJenkinsJob = void 0;
 const core = __importStar(require("@actions/core"));
 async function getJenkinsCrumb(url, headers) {
     const base64 = require('base-64');
@@ -53,4 +53,27 @@ async function runJenkinsJob(url, crumbRequired, job, username, token) {
     }).then(Response => Response.statusText);
 }
 exports.runJenkinsJob = runJenkinsJob;
+async function runJenkinsJobWithParameters(url, crumbRequired, job, username, token, parameters = null) {
+    const base64 = require('base-64');
+    const headers = new Headers();
+    let urljoin = await import('url-join');
+    let crumb;
+    let body = '';
+    headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
+    const urlJob = urljoin.default(url, 'job', job, 'build');
+    core.debug('Jenkins job url: ' + urlJob);
+    if (crumbRequired) {
+        crumb = (await getJenkinsCrumb(url, headers)).toString();
+        headers.append('Jenkins-Crumb', crumb);
+    }
+    if (parameters) {
+        body = JSON.parse(parameters);
+    }
+    return fetch(urlJob, {
+        method: 'POST',
+        headers: headers,
+        body: body.toString()
+    }).then(Response => Response.statusText);
+}
+exports.runJenkinsJobWithParameters = runJenkinsJobWithParameters;
 //# sourceMappingURL=jenkins.js.map

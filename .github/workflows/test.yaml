@@ -19,4 +19,5 @@ jobs:
                 token: ${{ secrets.JENKINS_TOKEN}}
                 job: TestPipeline
                 crumbRequired: true
+                params: '{"Repo": "xyz"}'
 

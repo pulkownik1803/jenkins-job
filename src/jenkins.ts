@@ -28,3 +28,26 @@ export async function runJenkinsJob(url: string, crumbRequired: boolean, job: st
         headers: headers
     }).then(Response => Response.statusText);
 }
+
+export async function runJenkinsJobWithParameters(url: string, crumbRequired: boolean, job: string, username: string, token: string, parameters: any = null): Promise<string> {
+    const base64 = require('base-64');
+    const headers = new Headers();
+    let urljoin = await import('url-join');
+    let crumb: string;
+    let body:BodyInit = '';
+    headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token))
+    const urlJob = urljoin.default(url, 'job', job, 'build')
+    core.debug('Jenkins job url: ' + urlJob);
+    if (crumbRequired) {
+        crumb = (await getJenkinsCrumb(url, headers)).toString();
+        headers.append('Jenkins-Crumb', crumb)
+    }
+    if (parameters){
+        body = JSON.parse(parameters)
+    }
+    return fetch(urlJob, {
+        method: 'POST',
+        headers: headers,
+        body: body.toString()
+    }).then(Response => Response.statusText);
+}
