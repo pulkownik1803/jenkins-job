@@ -7,7 +7,7 @@ import {runJenkinsJob, runJenkinsJobWithParameters} from './jenkins'
  */
 export async function run(): Promise<void> {
   try {
-    let status = runJenkinsJobWithParameters(core.getInput('url'), (core.getInput('crumRequired') == 'true'), core.getInput('job'), core.getInput('username'),core.getInput('token'), core.getInput("params"))
+    let status = runJenkinsJobWithParameters(core.getInput('url'), (core.getInput('crumRequired') == 'true'), core.getInput('job'), core.getInput('username'),core.getInput('token'), core.getInput('params'))
     core.info((await status).toString());
     core.setOutput('status', status);
   } catch (error) {

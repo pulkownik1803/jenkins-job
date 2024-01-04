@@ -29,7 +29,7 @@ export async function runJenkinsJob(url: string, crumbRequired: boolean, job: st
     }).then(Response => Response.statusText);
 }
 
-export async function runJenkinsJobWithParameters(url: string, crumbRequired: boolean, job: string, username: string, token: string, parameters: string = ''): Promise<string> {
+export async function runJenkinsJobWithParameters(url: string, crumbRequired: boolean, job: string, username: string, token: string, parameters: string): Promise<string> {
     const base64 = require('base-64');
     const headers = new Headers();
     let urljoin = await import('url-join');
@@ -42,10 +42,10 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
         crumb = (await getJenkinsCrumb(url, headers)).toString();
         headers.append('Jenkins-Crumb', crumb);
     }
-    core.info(JSON.parse(parameters));
+    core.info(parameters);
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: parameters
+        body: JSON.parse(parameters)
     }).then(Response => Response.statusText);
 }
