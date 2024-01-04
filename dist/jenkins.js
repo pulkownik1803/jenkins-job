@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getJenkinsCrumb = void 0;
+exports.runJenkinsJob = exports.getJenkinsCrumb = void 0;
 const core = __importStar(require("@actions/core"));
 async function getJenkinsCrumb(url, username, token) {
     const base64 = require('base-64');
@@ -37,4 +37,9 @@ async function getJenkinsCrumb(url, username, token) {
     return response.status.toString();
 }
 exports.getJenkinsCrumb = getJenkinsCrumb;
+async function runJenkinsJob(url, crumb, job) {
+    if (crumb) {
+    }
+}
+exports.runJenkinsJob = runJenkinsJob;
 //# sourceMappingURL=jenkins.js.map

@@ -32,7 +32,9 @@ const jenkins_1 = require("./jenkins");
  */
 async function run() {
     try {
-        core.setOutput('state', (0, jenkins_1.getJenkinsCrumb)(core.getInput('url'), core.getInput('username'), core.getInput('token')));
+        let status = (0, jenkins_1.getJenkinsCrumb)(core.getInput('url'), core.getInput('username'), core.getInput('token'));
+        // core.info((await status).toString())
+        // core.setOutput('state', (await status).toString())
     }
     catch (error) {
         if (error instanceof Error)
