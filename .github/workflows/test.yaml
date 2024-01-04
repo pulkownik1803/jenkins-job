@@ -19,5 +19,5 @@ jobs:
                 token: ${{ secrets.JENKINS_TOKEN}}
                 job: TestPipelineWithParams
                 crumbRequired: true
-                params: '{"Repo": "xyzaaa", "Branch":"bbbbbb"}'
+                params: '{"Repo": "xxxxxxxxxxxxx", "Branch":"zzzzzzzzzzzzzzzz"}'
 
