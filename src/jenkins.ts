@@ -35,7 +35,6 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
     let urljoin = await import('url-join');
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    // headers.append('Content-Disposition', 'form-data; Repo="metadata"')
     const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
     core.debug('Jenkins job url: ' + urlJob);
     if (crumbRequired) {
@@ -45,7 +44,7 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: 'Repo=repo'
+        body: 'Repo=repo;Branch=branch'
         
     }).then(Response => Response.statusText);
 }

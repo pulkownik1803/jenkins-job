@@ -59,7 +59,6 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
     let urljoin = await import('url-join');
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    // headers.append('Content-Disposition', 'form-data; Repo="metadata"')
     const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
     core.debug('Jenkins job url: ' + urlJob);
     if (crumbRequired) {
@@ -69,7 +68,7 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: 'Repo=repo'
+        body: 'Repo=repo;Branch=branch'
     }).then(Response => Response.statusText);
 }
 exports.runJenkinsJobWithParameters = runJenkinsJobWithParameters;
