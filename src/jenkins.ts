@@ -40,11 +40,14 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
     if (crumbRequired) {
         headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
     }
+    let httpParams = new URLSearchParams()
+    httpParams.append('Repo','repooo');
+    httpParams.append('Branch', 'brannnch');
     core.info(parameters);
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: 'Repo=repo,Branch=branch'
+        body: httpParams
         
     }).then(Response => Response.statusText);
 }
