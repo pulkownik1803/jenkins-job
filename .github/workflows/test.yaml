@@ -17,4 +17,5 @@ jobs:
                 url: http://localhost:8080
                 username: github
                 token: 1171f87efdff17f82c4828f84b794f473c
+                job: TestPipeline
 

@@ -1,23 +1,29 @@
 import * as core from '@actions/core'
 
-async function getJenkinsCrumb(url:string, username:string, token:string) : Promise<String> {
-    const base64 = require('base-64')
-    let urljoin = await import('url-join')
-    const headers = new Headers()
-    const crumbUrl:string = urljoin.default(url, 'crumbIssuer', 'api', 'json')
-    core.info(crumbUrl)
-    headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token))
+async function getJenkinsCrumb(url: string, headers: Headers): Promise<String> {
+    const base64 = require('base-64');
+    let urljoin = await import('url-join');
+    const crumbUrl: string = urljoin.default(url, 'crumbIssuer', 'api', 'json');
+    core.debug('Jenkins crumb url: ' + crumbUrl);
     return fetch(crumbUrl, {
         method: 'GET',
         headers: headers
-    }).then(Response => Response.json()).then(ResponseData => ResponseData.crumb)
-    
-}
-export async function runJenkinsJob(url:string, crumb:boolean, job:string, username:string, token:string): Promise<string> {
-    if (crumb) {
-        const crumbstring:string = (await getJenkinsCrumb(url, username, token)).toString() ;
-        return crumbstring;
-    }
+    }).then(Response => Response.json()).then(ResponseData => ResponseData.crumb);
 
-    return '';
+}
+export async function runJenkinsJob(url: string, crumbRequired: boolean, job: string, username: string, token: string): Promise<string> {
+    const base64 = require('base-64');
+    const headers = new Headers();
+    let urljoin = await import('url-join');
+    let crumb: string;
+    headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token))
+    if (crumbRequired) {
+        crumb = (await getJenkinsCrumb(url, headers)).toString();
+        headers.append('Jenkins-Crumb', crumb)
+    }
+    const urlJob = urljoin.default(url, 'job', job, 'build')
+    return fetch(urlJob, {
+        method: 'POST',
+        headers: headers
+    }).then(Response => Response.statusText);
 }
