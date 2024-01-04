@@ -36,6 +36,7 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
     headers.append('Content-Type', 'application/json');
     const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
+    const jobParameters = {'Repo': 'Value'};
     core.debug('Jenkins job url: ' + urlJob);
     if (crumbRequired) {
         headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
@@ -44,6 +45,6 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: '{"Repo"="aaaaaaa"}'
+        body: JSON.stringify(jobParameters)
     }).then(Response => Response.statusText);
 }
