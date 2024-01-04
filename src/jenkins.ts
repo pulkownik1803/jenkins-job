@@ -41,7 +41,10 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
         headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
     }
     let httpParams = new URLSearchParams()
-    httpParams = JSON.parse(parameters)
+    let jsonParams = JSON.parse(parameters)
+    for(let key in jsonParams){
+        httpParams.set(key, jsonParams[key]) 
+    }
     core.info(parameters);
     return fetch(urlJob, {
         method: 'POST',
