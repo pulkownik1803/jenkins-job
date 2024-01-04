@@ -53,12 +53,11 @@ async function runJenkinsJob(url, crumbRequired, job, username, token) {
     }).then(Response => Response.statusText);
 }
 exports.runJenkinsJob = runJenkinsJob;
-async function runJenkinsJobWithParameters(url, crumbRequired, job, username, token, parameters = null) {
+async function runJenkinsJobWithParameters(url, crumbRequired, job, username, token, parameters = '') {
     const base64 = require('base-64');
     const headers = new Headers();
     let urljoin = await import('url-join');
     let crumb;
-    let body = '';
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
     const urlJob = urljoin.default(url, 'job', job, 'build');
     core.debug('Jenkins job url: ' + urlJob);
@@ -66,13 +65,10 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
         crumb = (await getJenkinsCrumb(url, headers)).toString();
         headers.append('Jenkins-Crumb', crumb);
     }
-    if (parameters) {
-        body = JSON.parse(parameters);
-    }
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: body.toString()
+        body: JSON.stringify(parameters)
     }).then(Response => Response.statusText);
 }
 exports.runJenkinsJobWithParameters = runJenkinsJobWithParameters;
