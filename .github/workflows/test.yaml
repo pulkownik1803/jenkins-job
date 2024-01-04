@@ -11,12 +11,10 @@ jobs:
         steps:
             - name: Get the sources
               uses: actions/checkout@v4
-            - name: Create something
-              id: get-output
+            - name: Get Jenkins crumb
               uses: ./
               with: 
                 url: http://localhost:8080/crumbIssuer/api/json
                 username: github
                 token: 1171f87efdff17f82c4828f84b794f473c
-            - name: Print output
-              run: echo ${{steps.get-output.outputs.state}}
+

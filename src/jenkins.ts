@@ -1,17 +1,18 @@
 import * as core from '@actions/core'
 
-export async function getJenkinsCrumb(url:string, username:string, token:string) : Promise<string> {
+export function getJenkinsCrumb(url:string, username:string, token:string) : Promise<JSON> {
     const base64 = require('base-64')
     const headers = new Headers()
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token))
-    const response = await fetch(url, {
+    return fetch(url, {
         method: 'GET',
         headers: headers
-    });
-    core.info(response.status.toString());
-    return response.status.toString();
+    }).then(Response => {if (!Response.ok) {
+        throw new Error(Response.statusText)        
+    }return Response.json()})
+    
 }
-export async function runJenkinsJob(url:string, crumb:boolean, job:string) {
+export async function runJenkinsJob(url:string, crumb:boolean, job:string, username:string, token:string) {
     if (crumb) {
         
     }
