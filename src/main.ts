@@ -7,8 +7,9 @@ import {runJenkinsJob} from './jenkins'
  */
 export async function run(): Promise<void> {
   try {
-    let status = runJenkinsJob(core.getInput('url'), true, core.getInput('job'), core.getInput('username'),core.getInput('token'))
-    core.info((await status).toString())
+    let status = runJenkinsJob(core.getInput('url'), JSON.parse(core.getInput('crumRequired')), core.getInput('job'), core.getInput('username'),core.getInput('token'))
+    core.info((await status).toString());
+    core.setOutput('status', status);
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

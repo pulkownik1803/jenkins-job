@@ -6,13 +6,23 @@ author: 'Marek Lotocki'
 #   icon: 'heart'
 #   color: 'red'
 
-# Define your inputs here.
-# inputs:
-#   milliseconds:
-#     description: 'Your input description here'
-#     required: true
-#     default: '1000'
-
+inputs:
+  url:
+    description: 'Full url to the Jenkins instance'
+    required: true
+  username:
+    description: 'Name of the user which will be use to connect to the Jenkins'
+    required: true
+  token:
+    description: 'Token for the user'
+    required: true
+  crumbRequired:
+    description: 'Does Jenkins required crumb'
+    required: false
+    default: false
+  job:
+    description: 'Name of the job to run'
+    required: true
 outputs:
   state:
     description: 'State of the Jenkins job'
