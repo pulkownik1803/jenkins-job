@@ -11,12 +11,12 @@ jobs:
         steps:
             - name: Get the sources
               uses: actions/checkout@v4
-            - name: Get Jenkins crumb
+            - name: Run Jenkins job
               uses: ./
               with: 
                 url: http://localhost:8080
                 username: github
-                token: 1171f87efdff17f82c4828f84b794f473c
+                token: ${{ secrets.JENKINS_TOKEN}}
                 job: TestPipeline
                 crumbRequired: true
 
