@@ -32,7 +32,7 @@ const jenkins_1 = require("./jenkins");
  */
 async function run() {
     try {
-        let status = (0, jenkins_1.runJenkinsJob)(core.getInput('url'), true, 'JobName', core.getInput('username'), core.getInput('token'));
+        let status = (0, jenkins_1.runJenkinsJob)(core.getInput('url'), true, core.getInput('job'), core.getInput('username'), core.getInput('token'));
         core.info((await status).toString());
     }
     catch (error) {

@@ -46,6 +46,7 @@ async function runJenkinsJob(url, crumbRequired, job, username, token) {
         headers.append('Jenkins-Crumb', crumb);
     }
     const urlJob = urljoin.default(url, 'job', job, 'build');
+    core.debug('Jenkins job url: ' + urlJob);
     return fetch(urlJob, {
         method: 'POST',
         headers: headers

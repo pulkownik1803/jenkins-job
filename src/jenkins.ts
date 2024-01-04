@@ -22,6 +22,7 @@ export async function runJenkinsJob(url: string, crumbRequired: boolean, job: st
         headers.append('Jenkins-Crumb', crumb)
     }
     const urlJob = urljoin.default(url, 'job', job, 'build')
+    core.debug('Jenkins job url: ' + urlJob);
     return fetch(urlJob, {
         method: 'POST',
         headers: headers
