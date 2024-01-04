@@ -33,8 +33,8 @@ async function getJenkinsCrumb(url, username, token) {
         method: 'GET',
         headers: headers
     });
-    core.info(await response.json());
-    return response.json();
+    core.info(response.status.toString());
+    return response.status.toString();
 }
 exports.getJenkinsCrumb = getJenkinsCrumb;
 //# sourceMappingURL=jenkins.js.map

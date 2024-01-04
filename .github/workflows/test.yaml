@@ -16,7 +16,7 @@ jobs:
               uses: ./
               with: 
                 url: http://localhost:8080/crumbIssuer/api/json
-                username: github_service
-                token: 11ac6d598f492051a9a1c7810754fbe9b8
+                username: github
+                token: 1171f87efdff17f82c4828f84b794f473c
             - name: Print output
               run: echo ${{steps.get-output.outputs.state}}
