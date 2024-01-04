@@ -65,10 +65,11 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
         crumb = (await getJenkinsCrumb(url, headers)).toString();
         headers.append('Jenkins-Crumb', crumb);
     }
+    core.info(JSON.stringify(parameters));
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(parameters)
+        body: JSON.parse(parameters)
     }).then(Response => Response.statusText);
 }
 exports.runJenkinsJobWithParameters = runJenkinsJobWithParameters;

@@ -34,17 +34,17 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
     const headers = new Headers();
     let urljoin = await import('url-join');
     let crumb: string;
-    headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token))
-    const urlJob = urljoin.default(url, 'job', job, 'build')
+    headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
+    const urlJob = urljoin.default(url, 'job', job, 'build');
     core.debug('Jenkins job url: ' + urlJob);
     if (crumbRequired) {
         crumb = (await getJenkinsCrumb(url, headers)).toString();
-        headers.append('Jenkins-Crumb', crumb)
+        headers.append('Jenkins-Crumb', crumb);
     }
-
+    core.info(JSON.stringify(parameters));
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(parameters)
+        body: JSON.parse(parameters)
     }).then(Response => Response.statusText);
 }
