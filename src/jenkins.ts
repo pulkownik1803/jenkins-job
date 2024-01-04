@@ -33,8 +33,10 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
     const base64 = require('base-64');
     const headers = new Headers();
     let urljoin = await import('url-join');
+    let formData = new FormData();
+    formData.append('Repo', 'asdfg');
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
-    headers.append('Content-Type', 'application/json');
+    headers.append('Content-Type', 'multipart/form-data');
     const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
     const jobParameters = {'Repo': 'Value'};
     core.debug('Jenkins job url: ' + urlJob);
@@ -45,6 +47,6 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(jobParameters)
+        body: formData
     }).then(Response => Response.statusText);
 }
