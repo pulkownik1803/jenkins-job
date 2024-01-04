@@ -70,7 +70,7 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
-        body: JSON.parse(parameters)
+        body: parameters
     }).then(Response => Response.statusText);
 }
 exports.runJenkinsJobWithParameters = runJenkinsJobWithParameters;
