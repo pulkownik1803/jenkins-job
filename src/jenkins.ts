@@ -1,8 +1,8 @@
 function getJenkinsCrumb(url:string, username:string, token:string) : Promise<String> {
     const base64 = require('base-64')
-    const path = require('path')
+    const urljoin = require('url-join')
     const headers = new Headers()
-    const crumbUrl:string = path.join(url, 'crumbIssuer', 'api', 'json')
+    const crumbUrl:string = urljoin(url, 'crumbIssuer', 'api', 'json')
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token))
     return fetch(url, {
         method: 'GET',
