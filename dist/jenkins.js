@@ -59,7 +59,9 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
     let urljoin = await import('url-join');
     let crumb;
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
-    const urlJob = urljoin.default(url, 'job', job, 'build');
+    // headers.append('Content-Type', '')
+    // http://localhost:8080/job/TestPipelineWithParams/buildWithParameters
+    const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
     core.debug('Jenkins job url: ' + urlJob);
     if (crumbRequired) {
         crumb = (await getJenkinsCrumb(url, headers)).toString();
