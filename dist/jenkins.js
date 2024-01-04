@@ -8,12 +8,7 @@ function getJenkinsCrumb(url, username, token) {
     return fetch(url, {
         method: 'GET',
         headers: headers
-    }).then(Response => {
-        if (!Response.ok) {
-            throw new Error(Response.statusText);
-        }
-        return Response.json();
-    });
+    }).then(Response => Response.json()).then(ResponseData => ResponseData.crumb);
 }
 exports.getJenkinsCrumb = getJenkinsCrumb;
 async function runJenkinsJob(url, crumb, job, username, token) {
