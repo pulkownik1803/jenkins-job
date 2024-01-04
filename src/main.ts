@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {getJenkinsCrumb} from './jenkins' 
+import {runJenkinsJob} from './jenkins' 
 
 /**
  * The main function for the action.
@@ -7,7 +7,7 @@ import {getJenkinsCrumb} from './jenkins'
  */
 export async function run(): Promise<void> {
   try {
-    let status = getJenkinsCrumb(core.getInput('url'),core.getInput('username'),core.getInput('token'))
+    let status = runJenkinsJob(core.getInput('url'), true, 'JobName', core.getInput('username'),core.getInput('token'))
     core.info((await status).toString())
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
