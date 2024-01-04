@@ -7,7 +7,9 @@ import {getJenkinsCrumb} from './jenkins'
  */
 export async function run(): Promise<void> {
   try {
-    core.setOutput('state', getJenkinsCrumb(core.getInput('url'),core.getInput('username'),core.getInput('token')))
+    let status = getJenkinsCrumb(core.getInput('url'),core.getInput('username'),core.getInput('token'))
+    core.info((await status).toString())
+    core.setOutput('state', (await status).toString())
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
