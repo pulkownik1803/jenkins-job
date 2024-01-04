@@ -60,7 +60,7 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
     let formData = new FormData();
     formData.append('Repo', 'asdfg');
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
-    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
     const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
     core.debug('Jenkins job url: ' + urlJob);
     if (crumbRequired) {
