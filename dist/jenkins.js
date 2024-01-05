@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runJenkinsJob = void 0;
+exports.runJenkinsJobWithParameters = exports.runJenkinsJob = void 0;
 const core = __importStar(require("@actions/core"));
 async function getJenkinsCrumb(url, headers) {
     const base64 = require('base-64');
@@ -35,61 +35,48 @@ async function getJenkinsCrumb(url, headers) {
         headers: headers
     }).then(Response => Response.json()).then(ResponseData => ResponseData.crumb);
 }
-async function runJenkinsJob(url, crumbRequired, job, username, token, parameters) {
+async function runJenkinsJob(url, crumbRequired, job, username, token) {
     const base64 = require('base-64');
     const headers = new Headers();
     let urljoin = await import('url-join');
-    let urlJob;
     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
-    let method;
-    let httpParams = new URLSearchParams();
     if (crumbRequired) {
         headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
     }
-    if (Boolean((await getJenkinsJobParametrized(url, headers, job, true)))) {
-        urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
-        let jsonParams = JSON.parse(String(parameters));
-        for (let key in jsonParams) {
-            httpParams.set(key, jsonParams[key]);
-        }
-        method = 'POST';
-    }
-    else {
-        urlJob = urljoin.default(url, 'job', job, 'build');
-        method = 'GET';
-    }
+    let urlJob = urljoin.default(url, 'job', job, 'build');
     core.debug('Jenkins job url: ' + urlJob);
+    core.info(String(await getJenkinsJobParametrized(url, headers, job, true)));
     return fetch(urlJob, {
-        method: method,
+        method: 'GET',
+        headers: headers
+    }).then(Response => Response.statusText);
+}
+exports.runJenkinsJob = runJenkinsJob;
+async function runJenkinsJobWithParameters(url, crumbRequired, job, username, token, parameters) {
+    const base64 = require('base-64');
+    const headers = new Headers();
+    let urljoin = await import('url-join');
+    headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
+    core.debug('Jenkins job url: ' + urlJob);
+    if (crumbRequired) {
+        headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
+    }
+    let httpParams = new URLSearchParams();
+    let jsonParams = JSON.parse(parameters);
+    for (let key in jsonParams) {
+        httpParams.set(key, jsonParams[key]);
+    }
+    core.info(String(await getJenkinsJobParametrized(url, headers, job, true)));
+    core.info(parameters);
+    return fetch(urlJob, {
+        method: 'POST',
         headers: headers,
         body: httpParams
     }).then(Response => Response.statusText);
 }
-exports.runJenkinsJob = runJenkinsJob;
-// export async function runJenkinsJobWithParameters(url: string, crumbRequired: boolean, job: string, username: string, token: string, parameters: string): Promise<string> {
-//     const base64 = require('base-64');
-//     const headers = new Headers();
-//     let urljoin = await import('url-join');
-//     headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
-//     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-//     const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
-//     core.debug('Jenkins job url: ' + urlJob);
-//     if (crumbRequired) {
-//         headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
-//     }
-//     let httpParams = new URLSearchParams()
-//     let jsonParams = JSON.parse(parameters)
-//     for (let key in jsonParams) {
-//         httpParams.set(key, jsonParams[key])
-//     }
-//     let x: string = String(await getJenkinsJobParametrized(url, headers, job, true))
-//     core.info(parameters);
-//     return fetch(urlJob, {
-//         method: 'POST',
-//         headers: headers,
-//         body: httpParams
-//     }).then(Response => Response.statusText);
-// }
+exports.runJenkinsJobWithParameters = runJenkinsJobWithParameters;
 async function getJenkinsJobParametrized(url, headers, job, crumbRequired = false) {
     // Import required modules
     let urljoin = await import('url-join');
