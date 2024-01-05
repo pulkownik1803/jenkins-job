@@ -47,7 +47,7 @@ async function runJenkinsJob(url, crumbRequired, job, username, token) {
     core.debug('Jenkins job url: ' + urlJob);
     core.info(String(await getJenkinsJobParametrized(url, headers, job, true)));
     return fetch(urlJob, {
-        method: 'GET',
+        method: 'POST',
         headers: headers
     }).then(Response => Response.statusText);
 }
@@ -88,15 +88,9 @@ async function getJenkinsJobParametrized(url, headers, job, crumbRequired = fals
     // Construct url to get details of the job 
     const urlJob = urljoin.default(url, 'job', job, 'api/json');
     core.debug('Jenkins job url: ' + urlJob);
-    let parameters = await fetch(urlJob, {
+    return await fetch(urlJob, {
         method: 'POST',
         headers: headers,
-    }).then(Response => Response.json()).then(ResponseData => ResponseData.property);
-    if (parameters) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    }).then(Response => Response.json()).then(ResponseData => ResponseData.property.length);
 }
 //# sourceMappingURL=jenkins.js.map

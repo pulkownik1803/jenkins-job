@@ -23,7 +23,7 @@ export async function runJenkinsJob(url: string, crumbRequired: boolean, job: st
     core.debug('Jenkins job url: ' + urlJob);
     core.info(String(await getJenkinsJobParametrized(url, headers, job, true)))
     return fetch(urlJob, {
-        method: 'GET',
+        method: 'POST',
         headers: headers
     }).then(Response => Response.statusText);
 }
@@ -53,7 +53,7 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
 
     }).then(Response => Response.statusText);
 }
-async function getJenkinsJobParametrized(url: string, headers: Headers, job: string, crumbRequired: boolean = false): Promise<boolean> {
+async function getJenkinsJobParametrized(url: string, headers: Headers, job: string, crumbRequired: boolean = false): Promise<number> {
     // Import required modules
     let urljoin = await import('url-join');
     const base64 = require('base-64');
@@ -67,14 +67,9 @@ async function getJenkinsJobParametrized(url: string, headers: Headers, job: str
     const urlJob = urljoin.default(url, 'job', job, 'api/json')
     core.debug('Jenkins job url: ' + urlJob)
 
-    let parameters = await fetch(urlJob, {
+    return await fetch(urlJob, {
         method: 'POST',
         headers: headers,
-    }).then(Response => Response.json()).then(ResponseData => ResponseData.property);
-    if (parameters) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    }).then(Response => Response.json()).then(ResponseData => ResponseData.property.length);
+
 }
