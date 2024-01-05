@@ -77,4 +77,26 @@ async function runJenkinsJobWithParameters(url, crumbRequired, job, username, to
     }).then(Response => Response.statusText);
 }
 exports.runJenkinsJobWithParameters = runJenkinsJobWithParameters;
+async function getJenkinsJobParametrized(url, headers, job, crumbRequired = false) {
+    // Import required modules
+    let urljoin = await import('url-join');
+    const base64 = require('base-64');
+    // Get crumb when required
+    if (crumbRequired) {
+        headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
+    }
+    // Construct url to get details of the job 
+    const urlJob = urljoin.default(url, 'job', job, 'api/json');
+    core.debug('Jenkins job url: ' + urlJob);
+    let parameters = await fetch(urlJob, {
+        method: 'POST',
+        headers: headers,
+    }).then(Response => Response.json()).then(ResponseData => ResponseData.property);
+    if (parameters) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 //# sourceMappingURL=jenkins.js.map
