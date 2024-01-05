@@ -17,6 +17,7 @@ jobs:
                 url: http://localhost:8080
                 username: github
                 token: ${{ secrets.JENKINS_TOKEN}}
-                job: TestPipeline
+                job: TestPipelineWithParams
                 crumbRequired: true
+                params: '{"Repo": "1234", "Branch":"5678"}'
 
