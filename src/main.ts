@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import * as jenkins from './jenkins.js' 
+import * as jenkins from './jenkins' 
 
 /**
  * The main function for the action.
