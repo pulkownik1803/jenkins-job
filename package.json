@@ -3,6 +3,7 @@
   "description": "Interact with Jenkins job",
   "version": "0.0.1",
   "author": "Marek Lotocki",
+  "type": "module",
   "private": true,
   "homepage": "https://github.com/pulkownik1803/jenkins-job",
   "repository": {
