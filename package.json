@@ -43,7 +43,8 @@
     "testEnvironment": "node",
     "moduleFileExtensions": [
       "js",
-      "ts"
+      "ts",
+      "d.ts"
     ],
     "testMatch": [
       "**/*.test.ts"

@@ -1,9 +1,8 @@
 import * as core from '@actions/core'
+import * as urljoin from 'url-join'
 
-async function getJenkinsCrumb(url: string, headers: Headers): Promise<String> {
-    const base64 = require('base-64');
-    let urljoin = await import('url-join');
-    const crumbUrl: string = urljoin.default(url, 'crumbIssuer', 'api', 'json');
+async function getJenkinsCrumb(headers: Headers): Promise<String> {
+    const crumbUrl: string = urljoin.default(core.getInput('url'), 'crumbIssuer', 'api', 'json');
     core.debug('Jenkins crumb url: ' + crumbUrl);
     return fetch(crumbUrl, {
         method: 'GET',
@@ -11,41 +10,28 @@ async function getJenkinsCrumb(url: string, headers: Headers): Promise<String> {
     }).then(Response => Response.json()).then(ResponseData => ResponseData.crumb);
 
 }
-export async function runJenkinsJob(url: string, crumbRequired: boolean, job: string, username: string, token: string): Promise<string> {
-    const base64 = require('base-64');
+export async function runJenkinsJob(): Promise<string> {
     const headers = new Headers();
-    let urljoin = await import('url-join');
-    headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
-    if (crumbRequired) {
-        headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString())
-    }
-    let urlJob = urljoin.default(url, 'job', job, 'build')
-    core.debug('Jenkins job url: ' + urlJob);
-    core.info(String(await getJenkinsJobParametrized(url, headers, job, true)))
-    return fetch(urlJob, {
-        method: 'POST',
-        headers: headers
-    }).then(Response => Response.statusText);
-}
-
-export async function runJenkinsJobWithParameters(url: string, crumbRequired: boolean, job: string, username: string, token: string, parameters: string): Promise<string> {
-    const base64 = require('base-64');
-    const headers = new Headers();
-    let urljoin = await import('url-join');
-    headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + token));
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    const urlJob = urljoin.default(url, 'job', job, 'buildWithParameters');
-    core.debug('Jenkins job url: ' + urlJob);
-    if (crumbRequired) {
-        headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
-    }
     let httpParams = new URLSearchParams()
-    let jsonParams = JSON.parse(parameters)
-    for (let key in jsonParams) {
-        httpParams.set(key, jsonParams[key])
+    let urlJob = urljoin.default(core.getInput('url'), 'job', core.getInput('job'));
+    headers.set('Authorization', getBasicAuthenticationHeader());
+    if (core.getInput('crumbRequired')) {
+        headers.append('Jenkins-Crumb', (await getJenkinsCrumb(headers)).toString())
     }
-    core.info(String(await getJenkinsJobParametrized(url, headers, job, true)))
-    core.info(parameters);
+
+    if (await getJenkinsJobParameters(headers) > 0) {
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        urlJob = urljoin.default(urlJob, 'buildWithParameters');
+
+        let jsonParams = JSON.parse(core.getInput('params'))
+        for (let key in jsonParams) {
+            httpParams.set(key, jsonParams[key])
+        }
+
+    }
+    else {
+        urlJob = urljoin.default(urlJob, 'build');
+    }
     return fetch(urlJob, {
         method: 'POST',
         headers: headers,
@@ -53,23 +39,28 @@ export async function runJenkinsJobWithParameters(url: string, crumbRequired: bo
 
     }).then(Response => Response.statusText);
 }
-async function getJenkinsJobParametrized(url: string, headers: Headers, job: string, crumbRequired: boolean = false): Promise<number> {
+
+async function getJenkinsJobParameters(headers: Headers): Promise<number> {
     // Import required modules
-    let urljoin = await import('url-join');
     const base64 = require('base-64');
 
     // Get crumb when required
-    if (crumbRequired) {
-        headers.append('Jenkins-Crumb', (await getJenkinsCrumb(url, headers)).toString());
+    if (core.getInput('crumbRequired')) {
+        headers.append('Jenkins-Crumb', (await getJenkinsCrumb(headers)).toString());
     }
 
     // Construct url to get details of the job 
-    const urlJob = urljoin.default(url, 'job', job, 'api/json')
+    const urlJob = urljoin.default(core.getInput('url'), 'job', core.getInput('job'), 'api/json')
     core.debug('Jenkins job url: ' + urlJob)
 
     return await fetch(urlJob, {
         method: 'POST',
         headers: headers,
     }).then(Response => Response.json()).then(ResponseData => ResponseData.property.length);
-
+}
+function getBasicAuthenticationHeader(): string {
+    // Import required modules
+    const base64 = require('base-64');
+    // Format authentication value
+    return 'Basic ' + base64.encode(core.getInput('username') + ":" + core.getInput('token'));
 }
