@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 
 async function getJenkinsCrumb(headers: Headers): Promise<String> {
-    let urljoin = require('url-join')
+    let urljoin = await import('url-join');
     const crumbUrl: string = urljoin.default(core.getInput('url'), 'crumbIssuer', 'api', 'json');
     core.debug('Jenkins crumb url: ' + crumbUrl);
     return fetch(crumbUrl, {
@@ -11,7 +11,7 @@ async function getJenkinsCrumb(headers: Headers): Promise<String> {
 
 }
 export async function runJenkinsJob(): Promise<string> {
-    let urljoin = require('url-join')
+    let urljoin = await import('url-join');
     const headers = new Headers();
     let httpParams = new URLSearchParams()
     let urlJob = urljoin.default(core.getInput('url'), 'job', core.getInput('job'));
@@ -43,7 +43,7 @@ export async function runJenkinsJob(): Promise<string> {
 
 async function getJenkinsJobParameters(headers: Headers): Promise<number> {
     // Import required modules
-    let urljoin = require('url-join')
+    let urljoin = await import('url-join');
     const base64 = require('base-64');
 
     // Get crumb when required
