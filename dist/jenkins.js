@@ -1,6 +1,32 @@
-import * as core from '@actions/core';
-import * as urljoin from 'url-join';
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.runJenkinsJob = void 0;
+const core = __importStar(require("@actions/core"));
 async function getJenkinsCrumb(headers) {
+    let urljoin = require('url-join');
     const crumbUrl = urljoin.default(core.getInput('url'), 'crumbIssuer', 'api', 'json');
     core.debug('Jenkins crumb url: ' + crumbUrl);
     return fetch(crumbUrl, {
@@ -8,7 +34,8 @@ async function getJenkinsCrumb(headers) {
         headers: headers
     }).then(Response => Response.json()).then(ResponseData => ResponseData.crumb);
 }
-export async function runJenkinsJob() {
+async function runJenkinsJob() {
+    let urljoin = require('url-join');
     const headers = new Headers();
     let httpParams = new URLSearchParams();
     let urlJob = urljoin.default(core.getInput('url'), 'job', core.getInput('job'));
@@ -33,8 +60,10 @@ export async function runJenkinsJob() {
         body: httpParams
     }).then(Response => Response.statusText);
 }
+exports.runJenkinsJob = runJenkinsJob;
 async function getJenkinsJobParameters(headers) {
     // Import required modules
+    let urljoin = require('url-join');
     const base64 = require('base-64');
     // Get crumb when required
     if (core.getInput('crumbRequired')) {
