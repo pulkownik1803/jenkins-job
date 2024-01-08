@@ -21,7 +21,7 @@
     ".": "./dist/index.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=16"
   },
   "scripts": {
     "bundle": "npm run format:write && npm run package",
@@ -71,6 +71,6 @@
     "url-join": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.10.6"
+    "@types/node": "^16.0.0"
   }
 }
