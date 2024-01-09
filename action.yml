@@ -31,5 +31,5 @@ outputs:
     description: 'State of the Jenkins job'
 
 runs:
-  using: node18
+  using: node16
   main: dist/index.js
